@@ -1,0 +1,1 @@
+-wto "ae302d5aa3284400815652c101d33dae" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "secureip" -L "xpm" --snapshot "mef_decod_i2s_v1b_behav" "xil_defaultlib.mef_decod_i2s_v1b" -log "elaborate.log" 
