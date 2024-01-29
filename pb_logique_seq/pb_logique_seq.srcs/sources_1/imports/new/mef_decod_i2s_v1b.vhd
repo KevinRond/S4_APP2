@@ -57,7 +57,7 @@ SIGNAL Sreg, Snext: State_type;
 begin
 
    -- pour detecter transitions d_ac_reclrc
-   reglrc_I2S: process (i_bclk, i_reset)
+   reglrc_I2S: process (i_bclk, i_reset, Snext, i_lrc)
    begin
         if (i_reset = '1') then
             Sreg <= Init;

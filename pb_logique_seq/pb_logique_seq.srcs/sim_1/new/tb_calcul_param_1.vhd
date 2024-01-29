@@ -41,6 +41,8 @@ BEGIN
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000001";
+        wait for 10 ns;
+        en <= '0';
 
         -- Test 2
         reset <= '1';  -- Assert reset before starting the next test
@@ -49,66 +51,98 @@ BEGIN
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000001";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000010";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000100";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
-        ech <= "000000000000000000001000";
+        ech <= "100000000000000000001000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000010000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000100000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000001000000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000010000000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000100000000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000001000000000";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000010000000001";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
-        ech <= "000000000000100000000001";
+        ech <= "100000000000100000000001";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000001000000000001";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000010000000000001";
+        wait for 10 ns;
+        en <= '0';
         
         wait for 10 ns;
         en <= '1';
         ech <= "000000000000000000000000";
+        wait for 10 ns;
+        en <= '0';
         
         
         wait for 100 ns;
