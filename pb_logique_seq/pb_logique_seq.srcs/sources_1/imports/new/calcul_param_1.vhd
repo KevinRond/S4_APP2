@@ -54,7 +54,7 @@ TYPE State_type is (Init, Counting, Done);
 SIGNAL Sreg, Snext: State_type;   
 SIGNAL reset : std_logic := '0';
 SIGNAL tempOutput : std_logic_vector(7 downto 0) := (others => '0');
-SIGNAL unsignedOutput : unsigned(7 downto 0);
+SIGNAL unsignedOutput : unsigned(7 downto 0) := (others => '0');
 SIGNAL output : std_logic_vector(7 downto 0) := (others => '0');
 
 ---------------------------------------------------------------------------------------------
@@ -82,16 +82,16 @@ begin
     transitions: process (Sreg, i_ech, i_en)
     begin
         case Sreg is
-            when Init =>        if (i_ech = (others => '0') AND i_en = '1') 
+            when Init =>        if (i_en = '1' and (i_ech = "000000000000000000000000"))
                                     THEN Snext <= Counting;
                                 else Snext <= Init;
                                 end if;
-            when Counting =>    if (i_ech = (others => '0') AND i_en = '1') 
+            when Counting =>    if (i_en = '1' and (i_ech = "000000000000000000000000"))
                                     THEN Snext <= Done;
                                 else Snext <= Counting;
                                 end if;
             when Done =>        Snext <= Init;
-            
+            when others =>      Snext <= Init;
         end case;
     end process;
     
@@ -104,6 +104,7 @@ begin
                                 tempOutput <= std_logic_vector(unsignedOutput);
                                 output(7 downto 1) <= tempOutput(6 downto 0);
                                 output(0 downto 0) <= "0";
+            when others =>      reset <= '1';
         end case;
     end process;
 

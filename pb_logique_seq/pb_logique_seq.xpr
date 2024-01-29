@@ -46,7 +46,7 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="zybo-z7-10"/>
-    <Option Name="WTXSimLaunchSim" Val="51"/>
+    <Option Name="WTXSimLaunchSim" Val="65"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -240,9 +240,6 @@
         <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_mux4_0_1/design_1_mux4_0_1.xci">
           <Proxy FileSetName="design_1_mux4_0_1"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_calcul_param_1_0_0/design_1_calcul_param_1_0_0.xci">
-          <Proxy FileSetName="design_1_calcul_param_1_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="design_1.bd" FileRelPathName="ip/design_1_calcul_param_2_0_0/design_1_calcul_param_2_0_0.xci">
           <Proxy FileSetName="design_1_calcul_param_2_0_0"/>
         </CompFileExtendedInfo>
@@ -370,6 +367,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_1/imports/new/simul_module_sig_tb.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../pb_APP_log_seq_xpr/pb_APP_log_seq/pb_APP_log_seq.srcs/sim_1/new/simul_module_sig_tb.vhd"/>
           <Attr Name="ImportTime" Val="1610551440"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -387,8 +385,10 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="simul_module_sig_tb"/>
+        <Option Name="TopModule" Val="calcul_param_1"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
+        <Option Name="TopArchitecture" Val="Behavioral"/>
+        <Option Name="TopRTLFile" Val="$PSRCDIR/sources_1/imports/new/calcul_param_1.vhd"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
         <Option Name="SelectedSimModel" Val="rtl"/>
@@ -414,12 +414,6 @@
     <FileSet Name="design_1_compteur_nbits_0_1" Type="BlockSrcs" RelSrcDir="$PSRCDIR/design_1_compteur_nbits_0_1" RelGenDir="$PGENDIR/design_1_compteur_nbits_0_1">
       <Config>
         <Option Name="TopModule" Val="design_1_compteur_nbits_0_1"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="design_1_calcul_param_1_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/design_1_calcul_param_1_0_0" RelGenDir="$PGENDIR/design_1_calcul_param_1_0_0">
-      <Config>
-        <Option Name="TopModule" Val="design_1_calcul_param_1_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -552,15 +546,6 @@
       <RQSFiles/>
     </Run>
     <Run Id="design_1_compteur_nbits_0_1_synth_1" Type="Ft3:Synth" SrcSet="design_1_compteur_nbits_0_1" Part="xc7z010clg400-1" ConstrsSet="design_1_compteur_nbits_0_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../rosj2103/Downloads/pb_logique_seq/pb_logique_seq.srcs/utils_1/imports/design_1_compteur_nbits_0_1_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="design_1_calcul_param_1_0_0_synth_1" Type="Ft3:Synth" SrcSet="design_1_calcul_param_1_0_0" Part="xc7z010clg400-1" ConstrsSet="design_1_calcul_param_1_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" AutoIncrementalDir="$PPRDIR/../../../../../../rosj2103/Downloads/pb_logique_seq/pb_logique_seq.srcs/utils_1/imports/design_1_calcul_param_1_0_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
@@ -744,23 +729,6 @@
       <RQSFiles/>
     </Run>
     <Run Id="design_1_compteur_nbits_0_1_impl_1" Type="Ft2:EntireDesign" Part="xc7z010clg400-1" ConstrsSet="design_1_compteur_nbits_0_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="design_1_compteur_nbits_0_1_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../rosj2103/Downloads/pb_logique_seq/pb_logique_seq.srcs/utils_1/imports/design_1_compteur_nbits_0_1_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="design_1_calcul_param_1_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z010clg400-1" ConstrsSet="design_1_calcul_param_1_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="design_1_calcul_param_1_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../../rosj2103/Downloads/pb_logique_seq/pb_logique_seq.srcs/utils_1/imports/design_1_calcul_param_1_0_0_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
