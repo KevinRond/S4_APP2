@@ -1,4 +1,3 @@
-
 ---------------------------------------------------------------------------------------------
 --    calcul_param_1.vhd
 ---------------------------------------------------------------------------------------------
@@ -50,75 +49,88 @@ architecture Behavioral of calcul_param_1 is
 ---------------------------------------------------------------------------------
 -- Signaux
 ----------------------------------------------------------------------------------
-TYPE State_type is (Init, Counting, Done);
-SIGNAL Sreg, Snext: State_type;   
-SIGNAL reset : std_logic := '0';
-SIGNAL canCount: std_logic := '0';
-SIGNAL tempOutput : std_logic_vector(7 downto 0) := (others => '0');
-SIGNAL unsignedOutput : unsigned(7 downto 0) := (others => '0');
-SIGNAL output : std_logic_vector(7 downto 0) := (others => '0');
+    type State_Type is (
+        Init,
+        Counting,
+        Done
+    );
+    
+    signal Sreg, Snext : State_Type := Init;
+    signal reset : std_logic := '0';
+    signal tempOutput : std_logic_vector(7 downto 0) := (others => '0');
+    signal output : std_logic_vector(7 downto 0) := (others => '0');
+    signal unsignedOutput : unsigned(7 downto 0);
+    signal buffer_param : std_logic_vector(7 downto 0) := (others => '0');
+ 
+    
 
 ---------------------------------------------------------------------------------------------
 --    Description comportementale
 ---------------------------------------------------------------------------------------------
 begin 
-
-   o_param <= output;
-
-    clock: process (i_bclk, i_reset)
+    -- changement de state --
+    clock : process (i_en, Snext, i_reset)
     begin
         if (i_reset = '1') then
-            Sreg <= Init;
             unsignedOutput <= (others => '0');
-        elsif i_bclk'event and (i_bclk = '1') THEN
             Sreg <= Snext;
-            if (reset = '1') THEN 
+        elsif (i_en'event and i_en = '1') then
+            Sreg <= Snext;
+            if (reset = '1') then 
                 unsignedOutput <= (others => '0');
-            else 
-                if (canCount = '1' AND Snext /= Done) THEN
-                    unsignedOutput <= unsignedOutput + 1; 
-                end if;
-            end if;    
+            else
+                unsignedOutput <= unsignedOutput + 1;
+            end if;
         end if;
     end process;
     
-    transitions: process (Sreg, i_ech, i_en)
+    transitions : process(Sreg, i_ech, unsignedOutput)
     begin
         case Sreg is
-            when Init =>        if (i_en = '1' and (i_ech = "000000000000000000000000"))
-                                    THEN Snext <= Counting;
-                                else Snext <= Init;
-                                end if;
-            when Counting =>    if (i_en = '0') then
-                                    Snext <= Done;
-                                elsif (i_ech = "000000000000000000000000") then
-                                    Snext <= Done; -- Change to Counting if you want to continue counting
-                                else
-                                    Snext <= Counting;
-                                end if;
-            when Done =>        Snext <= Init;
-            when others =>      Snext <= Init;
+            when Init =>
+                if (i_reset = '1') then
+                    Snext <= init;
+                elsif i_ech(23) = '0' then 
+                    Snext <= Counting;
+                else 
+                    Snext <= Init;
+                end if;
+            when Counting =>
+                if (i_reset = '1') then
+                    Snext <= Init;
+                elsif i_ech(23) = '1' then
+                    Snext <= Done;
+                else 
+                    Snext <= Counting;
+                end if;
+            when Done =>
+                if (i_ech(23) = '0') then 
+                    Snext <= Counting;
+                else
+                    Snext <= init;  
+                end if;              
         end case;
     end process;
     
-    Sortie: process(Sreg)
+    sortie : process(Sreg, buffer_param, tempOutput, unsignedOutput)
     begin
         case Sreg is
-            when Init =>        reset <= '1';
-                                canCount <= '0';
-            when Counting =>    reset <= '0';
-                                canCount <= '1';
-            when Done =>        reset <= '0';
-                                canCount <= '0';
-                                tempOutput <= std_logic_vector(unsignedOutput);
-                                output(7 downto 1) <= tempOutput(6 downto 0);
-                                output(0 downto 0) <= "0";
-                                
-            when others =>      reset <= '1';
-                                canCount <= '0';
+            when init => 
+                reset <= '1';
+                o_param <= buffer_param;
+            when Counting => 
+                reset <= '0';
+                o_param <= buffer_param;
+            when Done =>
+                tempOutput <= std_logic_vector(unsignedOutput);
+                if (TO_INTEGER(unsignedOutput) > 2) THEN
+                    buffer_param(7 downto 1) <= tempOutput(6 downto 0);
+                    buffer_param(0) <= '0';
+                end if;
+                o_param <= buffer_param;
+                reset <= '1';
+            when others =>
+                reset <= '1';
         end case;
     end process;
-
-     -- o_param <= x"01";    -- temporaire ...
- 
 end Behavioral;

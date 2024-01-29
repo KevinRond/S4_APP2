@@ -149,7 +149,8 @@ end nextRightInput;
     --   
     constant c_mclk_Period       : time :=  80.715 ns;  -- 12.288 MHz
     constant c_clk_p_Period      : time :=   8     ns;  -- 125 MHz
-    
+    signal compteur : natural := 0;
+    signal i_lrc_etat : std_logic := '0';
 
 
 begin
@@ -173,7 +174,7 @@ begin
    Port map
       (
         clk_100MHz  =>  d_ac_bclk,
-        i_lrc       =>  d_ac_pblrc,
+        i_lrc       =>  i_lrc_etat,
         i_recdat      =>  d_ac_recdat,
         i_sw        =>  s_sw,
         i_btn       => s_btn,
@@ -189,7 +190,7 @@ begin
         (
           clk      =>  d_ac_bclk,
           i_reset     =>  s_reset,
-          i_lrc       =>  d_ac_pblrc,
+          i_lrc       =>  i_lrc_etat,
           i_data       =>  d_sig_pbdat,
           o_dat_left  =>  d_ech_reg_left,
           o_dat_right =>  d_ech_reg_right,
@@ -201,7 +202,17 @@ begin
    ----------------------------------------------------------------------------
    -- generation horloge
    ----------------------------------------------------------------------------
-   
+  -- Processus pour gérer le changement d'état de i_lrc
+    lrc_changement : process (d_ac_bclk)
+    begin
+        if rising_edge(d_ac_bclk) then
+            compteur <= compteur + 1;
+            if compteur = 24 then
+                i_lrc_etat <= not i_lrc_etat; -- Inverser l'état de i_lrc
+                compteur <= 0; -- Réinitialiser le compteur
+            end if;
+        end if;
+    end process;
   sim_mclk:  process
       begin
          d_ac_mclk <= '1';  -- init
