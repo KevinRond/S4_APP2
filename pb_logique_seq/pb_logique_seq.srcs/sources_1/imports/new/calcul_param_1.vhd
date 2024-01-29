@@ -50,13 +50,63 @@ architecture Behavioral of calcul_param_1 is
 ---------------------------------------------------------------------------------
 -- Signaux
 ----------------------------------------------------------------------------------
-    
+TYPE State_type is (Init, Counting, Done);
+SIGNAL Sreg, Snext: State_type;   
+SIGNAL reset : std_logic := '0';
+SIGNAL tempOutput : std_logic_vector(7 downto 0) := (others => '0');
+SIGNAL unsignedOutput : unsigned(7 downto 0);
+SIGNAL output : std_logic_vector(7 downto 0) := (others => '0');
 
 ---------------------------------------------------------------------------------------------
 --    Description comportementale
 ---------------------------------------------------------------------------------------------
 begin 
 
-     o_param <= x"01";    -- temporaire ...
+    o_param <= output;
+
+    clock: process (i_bclk, i_reset)
+    begin
+        if (i_reset = '1') then
+            Sreg <= Init;
+            unsignedOutput <= (others => '0');
+        elsif i_bclk'event and (i_bclk = '1') THEN
+            Sreg <= Snext;
+            if (reset = '1') THEN 
+                unsignedOutput <= (others => '0');
+            else 
+                unsignedOutput <= unsignedOutput + 1; 
+            end if;    
+        end if;
+    end process;
+    
+    transitions: process (Sreg, i_ech, i_en)
+    begin
+        case Sreg is
+            when Init =>        if (i_ech = (others => '0') AND i_en = '1') 
+                                    THEN Snext <= Counting;
+                                else Snext <= Init;
+                                end if;
+            when Counting =>    if (i_ech = (others => '0') AND i_en = '1') 
+                                    THEN Snext <= Done;
+                                else Snext <= Counting;
+                                end if;
+            when Done =>        Snext <= Init;
+            
+        end case;
+    end process;
+    
+    Sortie: process(Sreg)
+    begin
+        case Sreg is
+            when Init =>        reset <= '1';
+            when Counting =>    reset <= '0';
+            when Done =>        reset <= '0';
+                                tempOutput <= std_logic_vector(unsignedOutput);
+                                output(7 downto 1) <= tempOutput(6 downto 0);
+                                output(0 downto 0) <= "0";
+        end case;
+    end process;
+
+     -- o_param <= x"01";    -- temporaire ...
  
 end Behavioral;
