@@ -50,13 +50,75 @@ architecture Behavioral of calcul_param_1 is
 ---------------------------------------------------------------------------------
 -- Signaux
 ----------------------------------------------------------------------------------
-    
+TYPE State_type is (Init, Counting, Done);
+SIGNAL Sreg, Snext: State_type;   
+SIGNAL reset : std_logic := '0';
+SIGNAL canCount: std_logic := '0';
+SIGNAL tempOutput : std_logic_vector(7 downto 0) := (others => '0');
+SIGNAL unsignedOutput : unsigned(7 downto 0) := (others => '0');
+SIGNAL output : std_logic_vector(7 downto 0) := (others => '0');
 
 ---------------------------------------------------------------------------------------------
 --    Description comportementale
 ---------------------------------------------------------------------------------------------
 begin 
 
-     o_param <= x"01";    -- temporaire ...
+   o_param <= output;
+
+    clock: process (i_bclk, i_reset)
+    begin
+        if (i_reset = '1') then
+            Sreg <= Init;
+            unsignedOutput <= (others => '0');
+        elsif i_bclk'event and (i_bclk = '1') THEN
+            Sreg <= Snext;
+            if (reset = '1') THEN 
+                unsignedOutput <= (others => '0');
+            else 
+                if (canCount = '1' AND Snext /= Done) THEN
+                    unsignedOutput <= unsignedOutput + 1; 
+                end if;
+            end if;    
+        end if;
+    end process;
+    
+    transitions: process (Sreg, i_ech, i_en)
+    begin
+        case Sreg is
+            when Init =>        if (i_en = '1' and (i_ech = "000000000000000000000000"))
+                                    THEN Snext <= Counting;
+                                else Snext <= Init;
+                                end if;
+            when Counting =>    if (i_en = '0') then
+                                    Snext <= Done;
+                                elsif (i_ech = "000000000000000000000000") then
+                                    Snext <= Done; -- Change to Counting if you want to continue counting
+                                else
+                                    Snext <= Counting;
+                                end if;
+            when Done =>        Snext <= Init;
+            when others =>      Snext <= Init;
+        end case;
+    end process;
+    
+    Sortie: process(Sreg)
+    begin
+        case Sreg is
+            when Init =>        reset <= '1';
+                                canCount <= '0';
+            when Counting =>    reset <= '0';
+                                canCount <= '1';
+            when Done =>        reset <= '0';
+                                canCount <= '0';
+                                tempOutput <= std_logic_vector(unsignedOutput);
+                                output(7 downto 1) <= tempOutput(6 downto 0);
+                                output(0 downto 0) <= "0";
+                                
+            when others =>      reset <= '1';
+                                canCount <= '0';
+        end case;
+    end process;
+
+     -- o_param <= x"01";    -- temporaire ...
  
 end Behavioral;
