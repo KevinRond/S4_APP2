@@ -80,6 +80,26 @@ end component;
   );
   end component design_1;
   
+  component design_1_calcul_param_1_0_0
+    Port (
+         i_bclk : in std_logic;
+         i_ech : in std_logic_vector(23 downto 0);
+         i_en : in std_logic;
+         i_reset : in std_logic;
+         o_param : out std_logic_vector(7 downto 0)
+    );
+end component;
+
+    component calcul_param_2 is
+        Port (
+        i_bclk    : in   std_logic;   -- bit clock
+        i_reset   : in   std_logic;
+        i_en      : in   std_logic;   -- un echantillon present
+        i_ech     : in   std_logic_vector (23 downto 0);
+        o_param   : out  std_logic_vector (7 downto 0)                                     
+        );
+    end component;
+  
 impure function nextLeftInput return std_logic_vector is 
 variable iline : line;
 variable data: std_logic_vector(23 downto 0);
@@ -149,8 +169,9 @@ end nextRightInput;
     --   
     constant c_mclk_Period       : time :=  80.715 ns;  -- 12.288 MHz
     constant c_clk_p_Period      : time :=   8     ns;  -- 125 MHz
-    signal compteur : natural := 0;
-    signal i_lrc_etat : std_logic := '0';
+    
+    signal d_o_str_dat : std_logic := '0';
+    signal d_o_param : std_logic_vector(7 downto 0) := (others => '0');
 
 
 begin
@@ -174,7 +195,7 @@ begin
    Port map
       (
         clk_100MHz  =>  d_ac_bclk,
-        i_lrc       =>  i_lrc_etat,
+        i_lrc       =>  d_ac_pblrc,
         i_recdat      =>  d_ac_recdat,
         i_sw        =>  s_sw,
         i_btn       => s_btn,
@@ -190,29 +211,40 @@ begin
         (
           clk      =>  d_ac_bclk,
           i_reset     =>  s_reset,
-          i_lrc       =>  i_lrc_etat,
+          i_lrc       =>  d_ac_pblrc,
           i_data       =>  d_sig_pbdat,
           o_dat_left  =>  d_ech_reg_left,
           o_dat_right =>  d_ech_reg_right,
-          o_str_dat   =>  open
+          o_str_dat   =>  d_o_str_dat
       );
+      
+--      UUT_M5 : design_1_calcul_param_1_0_0
+--      Port map
+--        (
+--            i_bclk => d_ac_bclk,
+--            i_ech => d_val_ech_R,
+--            i_en => d_o_str_dat,
+--            i_reset => s_reset,
+--            o_param => d_o_param
+--        );
+        
+        UUT_M6 : calcul_param_2
+        Port map
+            (
+                i_bclk    => d_ac_bclk,
+                i_reset   => s_reset, 
+                i_en      => d_o_str_dat,
+                i_ech     => d_val_ech_R,
+                o_param   => d_o_param                                    
+             );
+                
     
   
   
    ----------------------------------------------------------------------------
    -- generation horloge
    ----------------------------------------------------------------------------
-  -- Processus pour gérer le changement d'état de i_lrc
-    lrc_changement : process (d_ac_bclk)
-    begin
-        if rising_edge(d_ac_bclk) then
-            compteur <= compteur + 1;
-            if compteur = 24 then
-                i_lrc_etat <= not i_lrc_etat; -- Inverser l'état de i_lrc
-                compteur <= 0; -- Réinitialiser le compteur
-            end if;
-        end if;
-    end process;
+   
   sim_mclk:  process
       begin
          d_ac_mclk <= '1';  -- init

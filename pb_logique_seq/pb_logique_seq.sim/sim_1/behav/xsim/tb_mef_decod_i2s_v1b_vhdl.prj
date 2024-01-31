@@ -1,0 +1,7 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../pb_logique_seq.srcs/sources_1/imports/new/mef_decod_i2s_v1b.vhd" \
+"../../../../pb_logique_seq.srcs/sim_1/new/tb_mef_decod_i2s_v1b.vhd" \
+
+# Do not sort compile order
+nosort

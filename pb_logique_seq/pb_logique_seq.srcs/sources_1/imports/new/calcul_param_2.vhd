@@ -49,9 +49,10 @@ architecture Behavioral of calcul_param_2 is
 ---------------------------------------------------------------------------------
 -- Signaux
 ----------------------------------------------------------------------------------
-Type TypeEtat is (init, puiss, add, done);
+Type TypeEtat is (init, puiss, add, sortie);
 signal CurrEtat, NextEtat : TypeEtat := Init;
-signal output, Buff, Ech, OldEch : std_logic_vector (47 downto 0) := (others =>'0');
+signal OldEch : unsigned(47 downto 0) := (others => '0');
+signal  Ech : std_logic_vector (47 downto 0) := (others =>'0');
 signal EchMul : std_logic_vector (52 downto 0) := (others => '0');
 constant MulCst : std_logic_vector (4 downto 0):= "11111";
  
@@ -69,8 +70,7 @@ begin
                 end if;
              end if;
         end process;
-        
-    transitions: process(i_en, i_ech, CurrEtat)
+    process(i_en, i_ech, CurrEtat)
     begin 
         case CurrEtat is
             when Init
@@ -79,13 +79,13 @@ begin
                             else NextEtat <= Init;
                             end if;
             when puiss =>   NextEtat <= add;
-            when add =>   NextEtat <= done;
-            when done =>   if i_en'event and i_en = '1'
+            when add =>   NextEtat <= sortie;
+            when sortie =>   if i_en'event and i_en = '1'
                               then NextEtat <= puiss;
                               end if;
                           end case;
                           end process;
-   sortie : process( i_ech, CurrEtat, Ech, OldEch, EchMul, Buff, output)
+   Puissance : process( i_ech, CurrEtat, Ech, OldEch, EchMul)
         begin
             case CurrEtat is
                 when Init =>     Ech <= (others => '0');
@@ -93,13 +93,13 @@ begin
                                     OldEch <= (others => '0');
 
                 when puiss => Ech <= std_logic_vector(signed(i_ech) * signed(i_ech));
-                                    EchMul <= OldEch * MulCst ;
+                                    EchMul <= std_logic_vector(OldEch) * MulCst ;
 
                 when add =>  
-                               OldEch <= Buff + Ech(52 downto 5);
+                               OldEch <= (shift_right(unsigned(Ech), 1)) + (shift_right(unsigned(EchMul(52 downto 5)),1));
 
-                when done =>      o_param <= OldEch(47 downto 40);
-                when others => Ech <= (others => '0');
+                when sortie =>      o_param <= std_logic_vector(OldEch(47 downto 40));
+                 when others => Ech <= (others => '0');
                                 EchMul <= (others => '0');
                                 OldEch <= (others => '0');
                          end case;
