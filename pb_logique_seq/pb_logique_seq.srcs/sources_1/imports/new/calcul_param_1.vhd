@@ -79,7 +79,9 @@ begin
             if (reset = '1') then 
                 unsignedOutput <= (others => '0');
             else
-                unsignedOutput <= unsignedOutput + 1;
+                if (Snext /= Done) then
+                    unsignedOutput <= unsignedOutput + 1;
+                end if;
             end if;
         end if;
     end process;

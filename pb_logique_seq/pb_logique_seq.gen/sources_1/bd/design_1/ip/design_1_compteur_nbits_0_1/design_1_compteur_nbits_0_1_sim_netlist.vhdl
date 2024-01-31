@@ -1,10 +1,10 @@
 -- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
--- Date        : Tue Jan 16 11:58:52 2024
--- Host        : gegi-3014-bmwin running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim
---               c:/Users/rosj2103/Downloads/pb_logique_seq/pb_logique_seq.gen/sources_1/bd/design_1/ip/design_1_compteur_nbits_0_1/design_1_compteur_nbits_0_1_sim_netlist.vhdl
+-- Date        : Tue Jan 30 23:08:29 2024
+-- Host        : DESKTOP-MV3APH8 running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode funcsim {c:/Users/kevin/Documents/Genie
+--               Info/S4/APP2/pb_logique_seq/pb_logique_seq.gen/sources_1/bd/design_1/ip/design_1_compteur_nbits_0_1/design_1_compteur_nbits_0_1_sim_netlist.vhdl}
 -- Design      : design_1_compteur_nbits_0_1
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.

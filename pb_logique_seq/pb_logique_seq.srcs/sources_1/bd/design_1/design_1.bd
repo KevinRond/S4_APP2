@@ -39,8 +39,8 @@
       "M3_fonction_distorsion_dure2": "",
       "parametre_0": "",
       "M8_commande": "",
-      "M6_parametre_2": "",
-      "M5_parametre_1": ""
+      "M5_parametre_1": "",
+      "M6_parametre_2": ""
     },
     "ports": {
       "i_recdat": {
@@ -1260,14 +1260,14 @@
           }
         }
       },
-      "M6_parametre_2": {
-        "vlnv": "xilinx.com:module_ref:calcul_param_2:1.0",
-        "xci_name": "design_1_calcul_param_2_0_0",
-        "xci_path": "ip\\design_1_calcul_param_2_0_0\\design_1_calcul_param_2_0_0.xci",
-        "inst_hier_path": "M6_parametre_2",
+      "M5_parametre_1": {
+        "vlnv": "xilinx.com:module_ref:calcul_param_1:1.0",
+        "xci_name": "design_1_calcul_param_1_0_0",
+        "xci_path": "ip\\design_1_calcul_param_1_0_0\\design_1_calcul_param_1_0_0.xci",
+        "inst_hier_path": "M5_parametre_1",
         "reference_info": {
           "ref_type": "hdl",
-          "ref_name": "calcul_param_2",
+          "ref_name": "calcul_param_1",
           "boundary_crc": "0x0"
         },
         "ports": {
@@ -1307,14 +1307,14 @@
           }
         }
       },
-      "M5_parametre_1": {
-        "vlnv": "xilinx.com:module_ref:calcul_param_1:1.0",
-        "xci_name": "design_1_calcul_param_1_0_0",
-        "xci_path": "ip\\design_1_calcul_param_1_0_0\\design_1_calcul_param_1_0_0.xci",
-        "inst_hier_path": "M5_parametre_1",
+      "M6_parametre_2": {
+        "vlnv": "xilinx.com:module_ref:calcul_param_2:1.0",
+        "xci_name": "design_1_calcul_param_2_0_0",
+        "xci_path": "ip\\design_1_calcul_param_2_0_0\\design_1_calcul_param_2_0_0.xci",
+        "inst_hier_path": "M6_parametre_2",
         "reference_info": {
           "ref_type": "hdl",
-          "ref_name": "calcul_param_1",
+          "ref_name": "calcul_param_2",
           "boundary_crc": "0x0"
         },
         "ports": {
@@ -1409,8 +1409,8 @@
         "ports": [
           "M1_decodeur_i2s/o_str_dat",
           "M7_parametre_3/i_en",
-          "M6_parametre_2/i_en",
-          "M5_parametre_1/i_en"
+          "M5_parametre_1/i_en",
+          "M6_parametre_2/i_en"
         ]
       },
       "clk_1": {
@@ -1421,8 +1421,8 @@
           "M10_conversion_affichage/clk",
           "M7_parametre_3/i_bclk",
           "M8_commande/clk",
-          "M6_parametre_2/i_bclk",
-          "M5_parametre_1/i_bclk"
+          "M5_parametre_1/i_bclk",
+          "M6_parametre_2/i_bclk"
         ]
       },
       "i_data_1": {
@@ -1468,8 +1468,8 @@
           "Multiplexeur_choix_fonction/output0",
           "M9_codeur_i2s/i_dat_right",
           "M7_parametre_3/i_ech",
-          "M6_parametre_2/i_ech",
-          "M5_parametre_1/i_ech"
+          "M5_parametre_1/i_ech",
+          "M6_parametre_2/i_ech"
         ]
       },
       "decodeur_i2s_o_dat_right": {
@@ -1507,8 +1507,8 @@
           "M9_codeur_i2s/i_reset",
           "M10_conversion_affichage/reset",
           "M7_parametre_3/i_reset",
-          "M6_parametre_2/i_reset",
-          "M5_parametre_1/i_reset"
+          "M5_parametre_1/i_reset",
+          "M6_parametre_2/i_reset"
         ]
       },
       "M8_commande_o_btn_cd": {

@@ -52,7 +52,8 @@ end mef_decod_i2s_v1b;
 architecture Behavioral of mef_decod_i2s_v1b is
 TYPE State_type is (Init, Reset_Counter_L, Counting_L, Done_L, Reset_Counter_R, Counting_R, Done_R);
 SIGNAL Sreg, Snext: State_type;
-    signal   d_reclrc_prec  : std_logic ;  --
+SIGNAL   d_reclrc_prec  : std_logic ;  --
+SIGNAL reset : STD_LOGIC := '0';
     
 begin
 
@@ -70,9 +71,9 @@ begin
    end process;
    
   -- synch compteur codeur
-   rest_cpt: process (i_lrc, d_reclrc_prec, i_reset)
+   rest_cpt: process (i_lrc, i_reset, reset)
       begin
-         o_cpt_bit_reset <= (d_reclrc_prec xor i_lrc) or i_reset;
+         o_cpt_bit_reset <= reset or i_reset;
       end process;
       
    transitions: process(i_lrc, Sreg, i_cpt_bits)
@@ -96,6 +97,7 @@ begin
                                     end if;
             when Done_R =>          if i_lrc = '0'
                                         THEN Snext <= Reset_Counter_L;
+                                    else Snext <= Init;
                                     end if;
         end case;
     end process;
@@ -104,87 +106,47 @@ begin
     begin
         case Sreg is
             when Init =>
-                o_cpt_bit_reset  <= '0';
+                reset  <= '0';
                 o_bit_enable     <= '0';
                 o_load_left      <= '0';
                 o_load_right     <= '0';
                 o_str_dat        <= '0';
             when Reset_Counter_L =>
-                o_cpt_bit_reset  <= '1';
+                reset  <= '1';
                 o_bit_enable     <= '0';
                 o_load_left      <= '0';
                 o_load_right     <= '0';
                 o_str_dat        <= '0';
             when Counting_L =>
-                o_cpt_bit_reset  <= '0';
+                reset  <= '0';
                 o_bit_enable     <= '1';
                 o_load_left      <= '1';
                 o_load_right     <= '0';
                 o_str_dat        <= '0';
             when Done_L =>
-                o_cpt_bit_reset  <= '0';
+                reset  <= '0';
                 o_bit_enable     <= '0';
                 o_load_left      <= '0';
                 o_load_right     <= '0';
                 o_str_dat        <= '0';
             when Reset_Counter_R =>
-                o_cpt_bit_reset  <= '1';
+                reset  <= '1';
                 o_bit_enable     <= '0';
                 o_load_left      <= '0';
                 o_load_right     <= '0';
                 o_str_dat        <= '0';
             when Counting_R =>
-                o_cpt_bit_reset  <= '0';
+                reset  <= '0';
                 o_bit_enable     <= '1';
                 o_load_left      <= '0';
                 o_load_right     <= '1';
-                o_str_dat        <= '0';
+                o_str_dat            <= '0';
             when Done_R =>
-                o_cpt_bit_reset  <= '0';
+                reset  <= '0';
                 o_bit_enable     <= '0';
                 o_load_left      <= '0';
                 o_load_right     <= '0';
-                o_str_dat        <= '1';
+                o_str_dat            <= '1';
         end case;
     end process;
-                            
-
-     -- decodage compteur avec case ...   
---        sig_ctrl_I2S:  process (i_cpt_bits, i_lrc )
---            begin
---                case i_cpt_bits is
---                 when "0000000" =>
---                     o_bit_enable     <= '1';
---                     o_load_left      <= '0';
---                     o_load_right     <= '0';
---                     o_str_dat        <= '0';
---                 when   "0000001"  |  "0000010"  |  "0000011"  |  "0000100"  
---                       |  "0000101"  |  "0000110"  |  "0000111"  |  "0001000" 
---                       |  "0001001"  |  "0001010"  |  "0001011"  |  "0001100" 
---                       |  "0001101"  |  "0001110"  |  "0001111"  |  "0010000"  
---                       |  "0010001"  |  "0010010"  |  "0010011"  |  "0010100" 
---                       |  "0010101"  |  "0010110"  |  "0010111"   
---                    =>
---                     o_bit_enable     <= '1';
---                     o_load_left      <= '0';
---                     o_load_right     <= '0';
---                     o_str_dat        <= '0';
---                 when   "0011000"  =>
---                     o_bit_enable     <= '0';
---                     o_load_left      <= not i_lrc;
---                     o_load_right     <=  i_lrc;
---                     o_str_dat        <= '0';
---                 when    "0011001"  =>
---                    o_bit_enable     <= '0';
---                    o_load_left     <= '0';
---                    o_load_right     <= '0';
---                    o_str_dat        <=  i_lrc;
---                 when  others  =>
---                    o_bit_enable     <= '0';
---                    o_load_left      <= '0';
---                    o_load_right     <= '0';
---                    o_str_dat        <= '0';
---                 end case;
---             end process;
-
-     end Behavioral;
+end Behavioral;
